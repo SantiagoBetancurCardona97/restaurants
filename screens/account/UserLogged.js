@@ -14,7 +14,7 @@ export default function UserLogged() {
                 title="Cerrar sesión"
                 onPress={() => {
                     closeSession()
-                    navigation.navigate("restaurants")
+                    navigation.navigate("account")
                 }}
             />
         </View>
