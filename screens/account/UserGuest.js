@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     viewBody: {
         marginHorizontal: 30
     },
-    imagen:{
+    image:{
         height: 300,
         width: "100%",
         marginBottom: 10
