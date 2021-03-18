@@ -25,7 +25,7 @@ export default function ChangeDisplayNameForm({displayName, setShowModal, toastR
         }
 
         setRelodUser(true)
-        toastRef.current.show("Se han actualizado Nombres yApellidos", 3000)
+        toastRef.current.show("Se han actualizado Nombres y Apellidos", 3000)
         setShowModal(false)
     }
 
