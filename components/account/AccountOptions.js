@@ -6,6 +6,7 @@ import { map } from 'lodash';
 import Modal from '../Modal';
 import ChangeDisplayNameForm from './ChangeDisplayNameForm';
 import ChangeEmailForm from './ChangeEmailForm';
+import ChangePasswordForm from './ChangePasswordForm';
 
 export default function AccountOptions({user, toastRef, setRelodUser}) {
     const [showModal, setShowModal] = useState(false)
@@ -56,16 +57,20 @@ export default function AccountOptions({user, toastRef, setRelodUser}) {
                 case "email":
                 setRenderComponent(
                   <ChangeEmailForm 
-                  email={user.email}
-                  setShowModal={setShowModal}
-                  toastRef={toastRef}
-                  setRelodUser={setRelodUser}   
+                    email={user.email}
+                    setShowModal={setShowModal}
+                    toastRef={toastRef}
+                    setRelodUser={setRelodUser}   
                   />
                 )
                 break;
                 case "password":
                 setRenderComponent(
-                  <Text>password</Text>  
+                    <ChangePasswordForm
+                        setShowModal={setShowModal}
+                        toastRef={toastRef}
+                        setRelodUser={setRelodUser}
+                    />    
                 )
                 break;
         }
