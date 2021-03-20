@@ -3,8 +3,8 @@ import { StyleSheet, View } from 'react-native'
 import {Button, Icon, Input} from 'react-native-elements'
 import { isEmpty, size } from 'lodash'
 
-import { reauthenticate, updateEmail } from '../../utils/actions'
-import { validateEmail } from '../../utils/helpers'
+import { reauthenticate, updatePassword } from '../../utils/actions'
+
 
 export default function ChangePasswordForm({setShowModal, toastRef}) {
     const [newPassword, setNewPassword] = useState(null)
@@ -21,27 +21,26 @@ export default function ChangePasswordForm({setShowModal, toastRef}) {
             return    
         }
         
-        // setLoading(true)
-        // const resultReauthenticate = await reauthenticate (password)
+        setLoading(true)
+        const resultReauthenticate = await reauthenticate (currentPassword)
         
-        // if(!resultReauthenticate.statusResponse){
-        //     setLoading(false)
-        //     setErrorPassword("Contraseña Incorrecta")
-        //     return
-        // }
+        if(!resultReauthenticate.statusResponse){
+            setLoading(false)
+            setErrorCurrentPassword("Contraseña Incorrecta")
+            return
+        }
 
-        // const resultUpdateEmail = await updateEmail (newEmail)
-        // setLoading(false)
+        const resultUpdatePassword = await updatePassword (newPassword)
+        setLoading(false)
         
 
-        // if(!resultUpdateEmail.statusResponse){
-        //     setErrorEmail("No se puede cambiar por este correo, ya esta registrado")
-        //     return
-        // }
+        if(!resultUpdatePassword.statusResponse){
+            setErrorNewPassword("Problemas para cambiar la contraseña, por favor intente mas tarde")
+            return
+        }
 
-        // setRelodUser(true)
-        // toastRef.current.show("Se han actualizado el correo", 3000)
-        // setShowModal(false)
+        toastRef.current.show("Se han actualizado la Contraseña.", 3000)
+        setShowModal(false)
     }
 
     const validateForm =() => {
