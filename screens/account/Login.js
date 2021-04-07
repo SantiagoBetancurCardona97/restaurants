@@ -12,7 +12,7 @@ export default function Login() {
     return (
         <KeyboardAwareScrollView>
             <Image
-                source={require("../../assets/PNG_LOGO.png")}
+                source={require("../../assets/Logo_wow.png")}
                 resizeMode="contain"
                 style={styles.image}
             />
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 40
     },
     divider: {
-        backgroundColor: "#754524",
+        backgroundColor: "#0ca3c4",
         margin: 40
     },
     register:{
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
         alignSelf: "center"
     },
     btnRegister: {
-        color:"#754524",
+        color:"#0ca3c4",
         fontWeight: "bold"
     }
 })

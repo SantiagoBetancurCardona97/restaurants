@@ -36,7 +36,7 @@ export const fileToBlob = async(path) => {
 export const getCurrentLocation = async() =>{
     const response={ status: false, location: null}
     const resultPermissions = await Permissions.askAsync(Permissions.LOCATION)
-    if(resultPermissions.status == "dinied") {
+    if(resultPermissions.status == "denied") {
         Alert.alert("Debes dar permisos para la localizacion.")
         return response
     }

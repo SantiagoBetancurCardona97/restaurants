@@ -12,13 +12,12 @@ export default function UserGuest() {
             style={styles.viewBody}
         >
             <Image
-                source={require("../../assets/PNG_LOGO.png")}
+                source={require("../../assets/Logo_wow.png")}
                 resizeMode="contain"
                 style={styles.image}
             />
             <Text style={styles.title}>Consulta tu perfil en Restaurants</Text>
-            <Text style={styles.description}> ¿Cómo describirías tu mejor restaurante? Busca y visualiza los mejores 
-                restaurantes de una forma sencilla. vota cual te ha gustado más y comenta cómo ha sido tu expriencia.
+            <Text style={styles.description}> ¿Te gusta un Restaurante?, Recomiendalo, comentalo para eso estamos..
             </Text>
             <Button
                 buttonStyle={styles.button}
@@ -51,6 +50,6 @@ const styles = StyleSheet.create({
         color: "#754524"
     },
     button:{
-        backgroundColor: "#faa523"
+        backgroundColor: "#0ca3c4"
     }
 })

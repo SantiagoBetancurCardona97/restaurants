@@ -7,7 +7,7 @@ export default function Register() {
     return (
         <KeyboardAwareScrollView >
             <Image
-                source={require("../../assets/PNG_LOGO.png")}
+                source={require("../../assets/Logo_wow.png")}
                 resizeMode="contain"
                 style={styles.image}
             />
