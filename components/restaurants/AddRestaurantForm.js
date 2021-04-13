@@ -4,16 +4,19 @@ import { Avatar, Button, Icon, Input, Image } from 'react-native-elements'
 import CountryPicker from 'react-native-country-picker-modal'
 import {map, size, filter, isEmpty} from 'lodash'
 import MapView from 'react-native-maps'
+import uuid from 'random-uuid-v4'
 
 import { getCurrentLocation, loadImageFromGallery, validateEmail } from '../../utils/helpers'
 import Modal from '../../components/Modal'
+import { getCurrentUser ,uploadImage } from '../../utils/actions'
+
 
 const widthScreen = Dimensions.get("window").width
 
 export default function AddRestaurantForm({toastRef, setLoading, navigation}) {
     const [formData, setFormData] = useState(defaultFomrValues())
     const [errorName, setErrorName] = useState(null)
-    const [errorDescripcion, setErrorDescription] = useState(null)
+    const [errorDescription, setErrorDescription] = useState(null)
     const [errorEmail, setErrorEmail] = useState(null)
     const [errorAddress, setErrorAddress] = useState(null)
     const [errorPhone, setErrorPhone] = useState(null)
@@ -22,12 +25,49 @@ export default function AddRestaurantForm({toastRef, setLoading, navigation}) {
     const [locationRestaurant, setLocationRestaurant] = useState(null)
     
    
-    const addRestaurant=()=>{
+    const addRestaurant=async()=>{
         if(!validForm()){
             return
         }
-     
-        console.log("melo pa")
+
+        setLoading(true)
+        const responseUploadImages=await uploadImages()
+        const restaurant = {
+            name: formData.name,
+            address: formData.address,
+            description: formData.description,
+            callingCode: formData.callingCode,
+            phone: formData.phone,
+            location: locationRestaurant,
+            email: formData.email,
+            images: responseUploadImages,
+            rating: 0,
+            ratingTotal: 0,
+            quantityVoting: 0,
+            createAt: new Date(),
+            createBy: getCurrentUser().uid
+        }
+        const responseAddDocument = await addDocumentWithoutId("restaurants", restaurant)
+        setLoading(false)
+        
+        if (!responseAddDocument.statusResponse) {
+            toastRef.current.show("Error al grabar el restaurante, por favor intenta más tarde.", 3000)
+            return
+        }
+        navigation.navigate("restaurants")
+    }
+
+    const uploadImages= async () => {
+        const imagesUrl= []
+        await Promise.all(
+            map(imagesSelected,async(image)=> {
+                const response = await uploadImage(image,"restaurants", uuid)
+                if(response.statusResponse){
+                    imagesUrl.push(response.url)
+                }
+            })
+        )
+        return
     }
 
     const validForm = () => {
@@ -87,7 +127,7 @@ export default function AddRestaurantForm({toastRef, setLoading, navigation}) {
                 formData={formData}
                 setFormData={setFormData}
                 errorName={errorName}
-                errorDescripcion={errorDescripcion}
+                errorDescription={errorDescription}
                 errorEmail={errorEmail}
                 errorAddress={errorAddress}
                 errorPhone={errorPhone}
@@ -133,41 +173,41 @@ function MapRestaurant ({isVisibleMap, setIsVisibleMap, setLocationRestaurant, t
     }
 
     return(
-    <Modal isVisible={isVisibleMap} setIsVisble={setIsVisibleMap}>
-        <View>
-            {
-                newRegion && (
-                    <MapView
-                        style={styles.mapStyle}
-                        initialRegion={newRegion}
-                        showsUserLocation={true}
-                        onRegionChange={(region)=> setNewRegion(region)}
-                    >
-                        <MapView.Marker
-                            coordinate={{
-                                latitude: newRegion.latitude,
-                                longitude: newRegion.longitude
-                            }}
-                            draggable
-                        />
-                    </MapView>
-                )
-            }
-            <View style={styles.viewMapBtn}>
-                <Button
-                    title="Guardar Ubicacion"
-                    containerStyle={styles.viewMapBtnContainerSave}
-                    buttonStyle={styles.viewMapBtnSave}
-                    onPress={confirmLocation}
-                />
-                 <Button
-                    title="Cancelar Ubicacion"
-                    containerStyle={styles.viewMapBtnContainerCancel}
-                    buttonStyle={styles.viewMapBtnCancel}
-                    onPress={()=>setIsVisibleMap(false)}
-                />
+    <Modal isVisible={isVisibleMap} setIsVisible={setIsVisibleMap}>
+         <View>
+                {
+                    newRegion && (
+                        <MapView
+                            style={styles.mapStyle}
+                            initialRegion={newRegion}
+                            showsUserLocation={true}
+                            onRegionChange={(region) => setNewRegion(region)}
+                        >
+                            <MapView.Marker
+                                coordinate={{
+                                    latitude: newRegion.latitude,
+                                    longitude: newRegion.longitude
+                                }}
+                                draggable
+                            />
+                        </MapView>
+                    ) 
+                }
+                <View style={styles.viewMapBtn}>
+                    <Button
+                        title="Guardar Ubicación"
+                        containerStyle={styles.viewMapBtnContainerSave}
+                        buttonStyle={styles.viewMapBtnSave}
+                        onPress={confirmLocation}
+                    />
+                    <Button
+                        title="Cancelar Ubicación"
+                        containerStyle={styles.viewMapBtnContainerCancel}
+                        buttonStyle={styles.viewMapBtnCancel}
+                        onPress={() => setIsVisibleMap(false)}
+                    />
+                </View>
             </View>
-        </View>
     </Modal>
     )
     
@@ -250,7 +290,7 @@ function UploadImage({toastRef, imagesSelected, setImagesSelected}) {
     )
 }
 
-function FormAdd({formData,setFormData,errorName,errorDescripcion,errorEmail,errorAddress,errorPhone,setIsVisibleMap,locationRestaurant}){
+function FormAdd({formData,setFormData,errorName,errorDescription,errorEmail,errorAddress,errorPhone,setIsVisibleMap,locationRestaurant}){
     const [country, setCountry] = useState("CO")
     const [callingCode, setCallingCode] = useState("57")
     const [phone, setPhone] = useState(" ")
@@ -310,12 +350,12 @@ function FormAdd({formData,setFormData,errorName,errorDescripcion,errorEmail,err
                 />  
             </View>
             <Input
-                placeholder="Descripcion del restaurante ..."
+                placeholder="Description del restaurante ..."
                 multiline
                 containerStyle={styles.textArea}
                 defaultValue={formData.description}
-                onChange={(e) => onChange(e, "descripcion")}
-                errorMessage={errorDescripcion}
+                onChange={(e) => onChange(e, "Description")}
+                errorMessage={errorDescription}
             />
             </View>
     )

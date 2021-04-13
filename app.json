@@ -20,9 +20,15 @@
       "supportsTablet": true
     },
     "android": {
+      "package":"com.santi.restaurant",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBS-NNvmJ8ifiNgFWIS9C1XMp4uC2fDA3E"
+        }
       },
       "permissions": [
         "CAMERA_ROLL",
